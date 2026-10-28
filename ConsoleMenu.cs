@@ -86,7 +86,7 @@
 
             if (!int.TryParse(Console.ReadLine(), out int id))
             {
-                Console.WriteLine("Ogiltigt ID.");
+                Console.WriteLine("Ogiltigt ID!");
                 return;
             }
 
@@ -100,9 +100,9 @@
         private void ShowAvailableCapacity()
         {
             Console.WriteLine("-----------------");
-            Console.WriteLine($"Använd kapacitet: {dogService.UsedCapacity}");
-            Console.WriteLine($"Max kapacitet: {dogService.MaxCapacity}");
-            Console.WriteLine($"Ledig kapacitet: {dogService.AvailableCapacity}");
+            Console.WriteLine($"Använd kapacitet: {dogService.UsedCapacity:0.#}");
+            Console.WriteLine($"Max kapacitet: {dogService.MaxCapacity:0.#}");
+            Console.WriteLine($"Ledig kapacitet: {dogService.AvailableCapacity:0.#}");
             Console.WriteLine("-----------------");
         }
 
@@ -113,8 +113,7 @@
 
             foreach (Dog dog in dogService.Dogs)
             {
-                Console.WriteLine(
-                    $"ID {dog.Id}: {dog.Name} | {dog.Size}");
+                Console.WriteLine($"ID {dog.Id}: {dog.Name} | {dog.Size}");
             }
 
             Console.WriteLine(
