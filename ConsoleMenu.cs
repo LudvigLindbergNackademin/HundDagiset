@@ -65,7 +65,7 @@
                 return;
             }
 
-            Console.Write("Storlek (1 = liten, 2 = medel, 3 = stor): ");
+            Console.Write("Storlek (1 = Liten, 2 = Medel, 3 = Stor): ");
 
             if (!int.TryParse(Console.ReadLine(), out int size)|| size < 1 || size > 3)
             {
@@ -82,16 +82,33 @@
 
         private void CheckOut()
         {
+            Console.Write("Hundens ID: ");
 
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine("Ogiltigt ID.");
+                return;
+            }
+
+            bool success = dogService.CheckOut(id);
+
+            Console.WriteLine(success
+                ? "Hunden är utcheckad."
+                : "Hunden hittades inte.");
         }
 
         private void ShowAvailableCapacity()
         {
-
+            Console.WriteLine("-----------------");
+            Console.WriteLine($"Använd kapacitet: {dogService.UsedCapacity}");
+            Console.WriteLine($"Max kapacitet: {dogService.MaxCapacity}");
+            Console.WriteLine($"Ledig kapacitet: {dogService.AvailableCapacity}");
+            Console.WriteLine("-----------------");
         }
 
         private void ShowDogs()
         {
+            Console.WriteLine("-----------------");
             Console.WriteLine($"Antal hundar: {dogService.Dogs.Count}");
 
             foreach (Dog dog in dogService.Dogs)
@@ -102,6 +119,7 @@
 
             Console.WriteLine(
                 $"Belastning: {dogService.GetLoadPercentage():0.#} %");
+            Console.WriteLine("-----------------");
         }
     }
 }

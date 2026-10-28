@@ -41,10 +41,10 @@
         {
             get
             {
-                int total = 0;
+                decimal total = 0;
 
                 foreach (Dog dog in dogs)
-                    total += (int)dog.SpaceRequired;
+                    total += dog.SpaceRequired;
 
                 return total;
             }
