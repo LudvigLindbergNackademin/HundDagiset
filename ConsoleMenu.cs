@@ -21,6 +21,11 @@
                 Console.WriteLine("2. Visa lediga platser");
                 Console.WriteLine("3. Checka in hund");
                 Console.WriteLine("4. Checka ut hund");
+                Console.WriteLine("5. Visa foderlager");
+                Console.WriteLine("6. Registrera foder");
+                Console.WriteLine("7. Ange hundens foder");
+                Console.WriteLine("8. Mata hund");
+                Console.WriteLine("9. Visa matstatus");
                 Console.WriteLine("0. Avsluta");
                 Console.WriteLine("-----------------");
                 Console.Write("Val: ");
@@ -41,6 +46,14 @@
 
                     case "4":
                         CheckOut();
+                        break;
+
+                    case "5":
+                        ShowFoodStock();
+                        break;
+
+                    case "6":
+                        AddFood();
                         break;
 
                     case "0":
@@ -119,6 +132,40 @@
             Console.WriteLine(
                 $"Belastning: {dogService.GetLoadPercentage():0.#} %");
             Console.WriteLine("-----------------");
+        }
+        private void ShowFoodStock()
+        {
+            Console.WriteLine("\n--- FODERLAGER ---");
+
+            if (dogService.FoodStock.Count == 0)
+            {
+                Console.WriteLine("Det finns inget registrerat foder.");
+                return;
+            }
+
+            foreach (var food in dogService.FoodStock)
+            {
+                Console.WriteLine($"{food.Key}: {food.Value} portioner");
+            }
+        }
+        private void AddFood()
+        {
+            Console.Write("Fodrets namn: ");
+            string name = (Console.ReadLine() ?? "").Trim();
+
+            Console.Write("Antal portioner: ");
+
+            if (!int.TryParse(Console.ReadLine(), out int portions))
+            {
+                Console.WriteLine("Ogiltigt antal.");
+                return;
+            }
+
+            bool success = dogService.AddFood(name, portions);
+
+            Console.WriteLine(success
+                ? $"{name} har registrerats."
+                : "Kunde inte registrera fodret. Kontrollera namn och antal.");
         }
     }
 }

@@ -12,7 +12,8 @@
         public int Id { get; }
         public string Name { get; }
         public DogSize Size { get; }
-
+        public string FoodName { get; private set; } = "";
+        public bool HasEaten { get; private set; }
         public decimal SpaceRequired => Size switch
         {
             DogSize.Liten => 0.5m,
@@ -26,6 +27,15 @@
             Id = id;
             Name = name;
             Size = size;
+        }
+        public void SetDiet(string foodName)
+        {
+            FoodName = foodName;
+        }
+
+        public void MarkAsFed()
+        {
+            HasEaten = true;
         }
     }
 
@@ -94,6 +104,22 @@
         public decimal GetLoadPercentage()
         {
             return UsedCapacity / MaxCapacity * 100m;
+        }
+        private readonly Dictionary<string, int> foodStock = new(StringComparer.OrdinalIgnoreCase);
+
+        public IReadOnlyDictionary<string, int> FoodStock => foodStock;
+        public bool AddFood(string name, int portions)
+        {
+            if (string.IsNullOrWhiteSpace(name) || portions <= 0)
+                return false;
+
+            name = name.Trim();
+
+            if (foodStock.ContainsKey(name))
+                return false;
+
+            foodStock.Add(name, portions);
+            return true;
         }
     }
 }
