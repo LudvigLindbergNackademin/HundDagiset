@@ -28,6 +28,10 @@
             Name = name;
             Size = size;
         }
+        public void SetDiet(string foodName)
+        {
+            FoodName = foodName;
+        }
 
         public void MarkAsFed()
         {
@@ -104,6 +108,7 @@
         private readonly Dictionary<string, int> foodStock = new(StringComparer.OrdinalIgnoreCase);
 
         public IReadOnlyDictionary<string, int> FoodStock => foodStock;
+
         public bool AddFood(string name, int portions)
         {
             if (string.IsNullOrWhiteSpace(name) || portions <= 0)
@@ -115,6 +120,27 @@
                 return false;
 
             foodStock.Add(name, portions);
+            return true;
+        }
+        public bool RefillFood(string name, int portions)
+        {
+            if (string.IsNullOrWhiteSpace(name) || portions <= 0)
+                return false;
+
+            if (!foodStock.ContainsKey(name))
+                return false;
+
+            foodStock[name] += portions;
+            return true;
+        }
+        public bool SetDogDiet(int id, string foodName)
+        {
+            Dog? dog = dogs.Find(d => d.Id == id);
+
+            if (dog == null || string.IsNullOrWhiteSpace(foodName))
+                return false;
+
+            dog.SetDiet(foodName.Trim());
             return true;
         }
         public bool TryFeedDog(int id, out string message)

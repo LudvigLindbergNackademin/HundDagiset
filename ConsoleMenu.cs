@@ -57,7 +57,15 @@
                         break;
 
                     case "7":
+                        SetDogDiet();
+                        break;
+
+                    case "8":
                         FeedDog();
+                        break;
+
+                    case "9":
+                        ShowFeedingStatus();
                         break;
 
                     case "0":
@@ -184,6 +192,49 @@
             bool success = dogService.TryFeedDog(id, out string message);
 
             Console.WriteLine(message);
+
+        }
+        private void SetDogDiet()
+        {
+            Console.Write("Hundens ID: ");
+
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine("Ogiltigt ID.");
+                return;
+            }
+
+            Console.Write("Vilket foder ska hunden ha? ");
+            string foodName = (Console.ReadLine() ?? "").Trim();
+
+            if (string.IsNullOrWhiteSpace(foodName))
+            {
+                Console.WriteLine("Du måste ange ett fodernamn.");
+                return;
+            }
+
+            bool success = dogService.SetDogDiet(id, foodName);
+
+            Console.WriteLine(success
+                ? "Hundens foder har registrerats."
+                : "Kunde inte registrera hundens foder.");
+        }
+        private void ShowFeedingStatus()
+        {
+            Console.WriteLine("\n--- MATSTATUS ---");
+
+            foreach (Dog dog in dogService.Dogs)
+            {
+                Console.WriteLine($"ID {dog.Id}: {dog.Name}");
+
+                Console.WriteLine(
+                    $"Foder: {(string.IsNullOrWhiteSpace(dog.FoodName) ? "Ej registrerat" : dog.FoodName)}");
+
+                Console.WriteLine(
+                    dog.HasEaten ? "Status: Har fått mat" : "Status: Har inte fått mat");
+
+                Console.WriteLine("-----------------");
+            }
         }
     }
 }
