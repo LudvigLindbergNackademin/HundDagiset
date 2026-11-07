@@ -56,6 +56,10 @@
                         AddFood();
                         break;
 
+                    case "7":
+                        FeedDog();
+                        break;
+
                     case "0":
                         running = false;
                         break;
@@ -166,6 +170,20 @@
             Console.WriteLine(success
                 ? $"{name} har registrerats."
                 : "Kunde inte registrera fodret. Kontrollera namn och antal.");
+        }
+        private void FeedDog()
+        {
+            Console.Write("Hundens ID: ");
+
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine("Ogiltigt ID.");
+                return;
+            }
+
+            bool success = dogService.TryFeedDog(id, out string message);
+
+            Console.WriteLine(message);
         }
     }
 }

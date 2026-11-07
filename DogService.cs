@@ -28,10 +28,6 @@
             Name = name;
             Size = size;
         }
-        public void SetDiet(string foodName)
-        {
-            FoodName = foodName;
-        }
 
         public void MarkAsFed()
         {
@@ -119,6 +115,42 @@
                 return false;
 
             foodStock.Add(name, portions);
+            return true;
+        }
+        public bool TryFeedDog(int id, out string message)
+        {
+            Dog? dog = dogs.Find(d => d.Id == id);
+
+            if (dog == null)
+            {
+                message = "Hunden hittades inte.";
+                return false;
+            }
+
+            if (dog.HasEaten)
+            {
+                message = "Hunden har redan fått mat.";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(dog.FoodName))
+            {
+                message = "Hunden har inget registrerat foder.";
+                return false;
+            }
+
+            if (!foodStock.ContainsKey(dog.FoodName) ||
+                foodStock[dog.FoodName] <= 0)
+            {
+                message = "Det finns inte tillräckligt med foder.";
+                return false;
+            }
+
+            foodStock[dog.FoodName]--;
+
+            dog.MarkAsFed();
+
+            message = $"{dog.Name} har fått mat.";
             return true;
         }
     }
