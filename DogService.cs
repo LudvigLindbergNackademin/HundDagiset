@@ -109,17 +109,22 @@
 
         public IReadOnlyDictionary<string, int> FoodStock => foodStock;
 
-        public bool AddFood(string name, int portions)
+        public bool AddFood(string foodName, int portions)
         {
-            if (string.IsNullOrWhiteSpace(name) || portions <= 0)
+            if (string.IsNullOrWhiteSpace(foodName) || portions <= 0)
+            {
                 return false;
+            }
 
-            name = name.Trim();
+            if (foodStock.ContainsKey(foodName))
+            {
+                foodStock[foodName] += portions;
+            }
+            else
+            {
+                foodStock.Add(foodName, portions);
+            }
 
-            if (foodStock.ContainsKey(name))
-                return false;
-
-            foodStock.Add(name, portions);
             return true;
         }
         public bool RefillFood(string name, int portions)
